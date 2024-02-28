@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity implements SerialListener{
                 .dataBits(8)
                 .stopBits(UsbSerialPort.STOPBITS_1)
                 .parity(UsbSerialPort.PARITY_NONE)
-                .build();    }
+                .build();
+    }
 
     @Override
     protected void onResume() {

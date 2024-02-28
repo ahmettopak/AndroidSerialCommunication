@@ -5,6 +5,8 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 
+import androidx.annotation.Nullable;
+
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
@@ -20,7 +22,7 @@ import java.util.List;
  */
 
 
-public class SerialManager {
+public class SerialManager{
     private final Activity activity;
     private final SerialListener serialListener;
     private final UsbManager usbManager;
@@ -86,7 +88,7 @@ public class SerialManager {
         this.parity = builder.parity;
     }
 
-    public void connect() {
+    public void connect() throws SerialException{
         UsbSerialDriver driver = findDevice();
         if (driver != null) {
             UsbDeviceConnection connection = usbManager.openDevice(driver.getDevice());
@@ -113,6 +115,7 @@ public class SerialManager {
         }
     }
 
+    @Nullable
     private UsbSerialDriver findDevice() {
         List<UsbSerialDriver> availableDrivers = UsbSerialProber.getDefaultProber().findAllDrivers(usbManager);
         for (UsbSerialDriver usbSerialDriver : availableDrivers) {
@@ -141,7 +144,7 @@ public class SerialManager {
         }
     }
 
-    public void sendData(String data) {
+    public void sendData(String data) throws SerialException{
         if (port != null) {
             try {
                 port.write(data.getBytes(), 100);
@@ -153,7 +156,7 @@ public class SerialManager {
         }
     }
 
-    public void close() {
+    public void close() throws SerialException{
         if (port != null) {
             try {
                 port.close();
