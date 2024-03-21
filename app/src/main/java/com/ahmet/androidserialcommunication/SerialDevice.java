@@ -1,7 +1,6 @@
 package com.ahmet.androidserialcommunication;
 
 import android.app.Activity;
-import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 
@@ -22,7 +21,7 @@ import java.util.List;
  */
 
 
-public class SerialManager{
+public class SerialDevice {
     private final Activity activity;
     private final SerialListener serialListener;
     private final UsbManager usbManager;
@@ -72,12 +71,12 @@ public class SerialManager{
             return this;
         }
 
-        public SerialManager build() {
-            return new SerialManager(this);
+        public SerialDevice build() {
+            return new SerialDevice(this);
         }
     }
 
-    private SerialManager(Builder builder) {
+    private SerialDevice(Builder builder) {
         this.activity = builder.activity;
         this.serialListener = builder.serialListener;
         this.usbManager = (UsbManager) activity.getSystemService(activity.USB_SERVICE);
