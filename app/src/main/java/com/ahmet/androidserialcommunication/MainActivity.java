@@ -6,38 +6,50 @@ import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ahmet.androidserialcommunication.serial.SerialConfig;
+import com.ahmet.androidserialcommunication.serial.SerialDevice;
+import com.ahmet.androidserialcommunication.serial.SerialException;
+import com.ahmet.androidserialcommunication.serial.SerialListener;
+import com.ahmet.androidserialcommunication.serial.SerialManager;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 
-public class MainActivity extends AppCompatActivity implements SerialListener{
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements SerialListener {
 
     private SerialDevice serialDevice;
-
+    SerialConfig config;
+    SerialDevice device;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        serialDevice = new SerialDevice.Builder(this, this)
-                .targetProductID(67)
-                .baudRate(115200)
-                .dataBits(8)
-                .stopBits(UsbSerialPort.STOPBITS_1)
-                .parity(UsbSerialPort.PARITY_NONE)
-                .build();
+        SerialManager serialManager = new SerialManager(this, this);
+
+        List<UsbSerialDriver> devices = serialManager.findAllDevices();
+        for (UsbSerialDriver d : devices) {
+            Toast.makeText(this, "Found device: " + d.getDevice().getProductId(), Toast.LENGTH_SHORT).show();
+        }
+
+        if (!devices.isEmpty()) {
+            try {
+                serialManager.connectToDeviceWithRetry(devices.get(0), 5, 2000); // Try to connect 5 times with a 2-second interval between retries
+                serialManager.sendData("Hello, serial!");
+            } catch (SerialException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            serialDevice.connect();
-        }
-        catch (SerialException e){
-            Toast.makeText(this, "Serial Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     @Override
@@ -57,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements SerialListener{
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(MainActivity.this, "Data Received: " + data, Toast.LENGTH_SHORT).show();
+                ((TextView)findViewById(R.id.textView)).setText(data + "Data");
             }
         });
 

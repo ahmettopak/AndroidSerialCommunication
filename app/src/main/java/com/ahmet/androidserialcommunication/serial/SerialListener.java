@@ -1,4 +1,4 @@
-package com.ahmet.androidserialcommunication;
+package com.ahmet.androidserialcommunication.serial;
 
 import android.hardware.usb.UsbDevice;
 
