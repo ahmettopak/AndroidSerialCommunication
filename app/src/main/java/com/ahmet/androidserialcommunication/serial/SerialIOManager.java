@@ -1,5 +1,6 @@
 package com.ahmet.androidserialcommunication.serial;
 
+
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 
