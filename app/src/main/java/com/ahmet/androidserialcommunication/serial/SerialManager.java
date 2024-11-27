@@ -26,8 +26,8 @@ public class SerialManager {
         this.usbManager = (UsbManager) activity.getSystemService(Activity.USB_SERVICE);
         this.serialListener = serialListener;
         serialConfig = new SerialConfig.Builder()
-                .targetProductID(8963)
-                .baudRate(115200)
+                .targetProductID(22336)
+                .baudRate(9600)
                 .dataBits(8)
                 .stopBits(UsbSerialPort.STOPBITS_1)
                 .parity(UsbSerialPort.PARITY_NONE)

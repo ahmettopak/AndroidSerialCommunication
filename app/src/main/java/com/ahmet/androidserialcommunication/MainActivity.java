@@ -20,10 +20,6 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SerialListener {
-
-    private SerialDevice serialDevice;
-    SerialConfig config;
-    SerialDevice device;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements SerialListener {
         if (!devices.isEmpty()) {
             try {
                 serialManager.connectToDeviceWithRetry(devices.get(0), 5, 2000); // Try to connect 5 times with a 2-second interval between retries
-                serialManager.sendData("Hello, serial!");
+                serialManager.sendData("?J 1");
+
             } catch (SerialException e) {
                 e.printStackTrace();
             }
